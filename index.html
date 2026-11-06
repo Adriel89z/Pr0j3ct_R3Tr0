@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pr0j3ct_R3Tr0</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="tela-login">
+        <input type="text" id="input-nome" placeholder="Nome do Usuário" maxlength="20">
+        <button id="botao-entrar">Entrar</button>
+    </div>
+
+    <div id="tela-desktop" class="escondido">
+        <h1>Bem-Vindo, <span id="nome-usuario"></span>!</h1>
+    </div>
+
+    <div id="popup" class="escondido">
+        <div class="popup-titulo">
+            <span>Aviso</span>
+            <button id="popup-fechar">X</button>
+        </div>
+        <div class="popup-corpo">
+            <span class="popup-icone">⚠️</span>
+            <p id="popup-mensagem"></p>
+        </div>
+        <button id="popup-ok">OK</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
