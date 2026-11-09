@@ -33,3 +33,40 @@
 .popup-icone {
     font-size: 32px;
 }
+
+#popup-ok {
+    display: block;
+    margin: 0 auto 16px;
+    min-width: 75px;
+}
+
+#tela-desktop {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.janela {
+    position: absolute;
+    width: 300px;
+    background: #ece9d8;
+    border: 2px solid #0054e3;
+}
+
+.janela-titulo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 6px;
+    background: linear-gradient(#3a8cf5, #0054e3);
+    color: white;
+    font-weight: bold;
+    cursor: grab;
+    user-select: none;
+    touch-action: none;
+}
+
+.janela-corpo {
+    padding: 16px;
+}

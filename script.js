@@ -48,3 +48,40 @@ inputNome.addEventListener('keydown', (event) => {
 
 popupOk.addEventListener('click', fecharAviso);
 popupFechar.addEventListener('click', fecharAviso);
+
+function tornarArrastavel(janela) {
+    const titulo = janela.querySelector('.janela-titulo');
+    let deslocamentoX = 0;
+    let deslocamentoY = 0;
+
+    titulo.addEventListener('pointerdown', (event) => {
+        deslocamentoX = event.clientX - janela.offsetLeft;
+        deslocamentoY = event.clientY - janela.offsetTop;
+
+        titulo.setPointerCapture(event.pointerId);
+    });
+
+    titulo.addEventListener('pointermove', (event) => {
+        if (!titulo.hasPointerCapture(event.pointerId)) return;
+        let novaEsquerda = event.clientX - deslocamentoX;
+        let novoTopo = event.clientY - deslocamentoY;
+
+        const limiteMaxEsquerda = window.innerWidth - janela.offsetWidth + 50; 
+        const limiteMaxTopo = window.innerHeight - janela.offsetHeight + 50;
+
+        
+        novaEsquerda = Math.max(-50, Math.min(novaEsquerda, limiteMaxEsquerda));
+        novoTopo = Math.max(0, Math.min(novoTopo, limiteMaxTopo));
+        
+        janela.style.left = `${novaEsquerda}px`;
+        janela.style.top = `${novoTopo}px`;
+    });
+    
+    titulo.addEventListener('pointerup', (event) => {
+        if (titulo.hasPointerCapture(event.pointerId)) {
+            titulo.releasePointerCapture(event.pointerId);
+        }
+    });
+}
+
+tornarArrastavel(document.querySelector('.janela'));
