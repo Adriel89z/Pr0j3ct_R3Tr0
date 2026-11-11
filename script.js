@@ -11,6 +11,8 @@ const popupFechar = document.getElementById('popup-fechar');
 
 const TAMANHO_MAXIMO_NOME = 20;
 
+let zTopo = 1;
+
 function mostrarAviso(mensagem) {
     popupMensagem.textContent = mensagem;
     popup.classList.remove('escondido');
@@ -49,12 +51,22 @@ inputNome.addEventListener('keydown', (event) => {
 popupOk.addEventListener('click', fecharAviso);
 popupFechar.addEventListener('click', fecharAviso);
 
+function configurarBotaoFechar(janela) {
+    const botaoFechar = janela.querySelector('.janela-fechar');
+    if (botaoFechar) {
+        botaoFechar.addEventListener('click', () => {
+            janela.remove();
+        });
+    }
+}
+
 function tornarArrastavel(janela) {
     const titulo = janela.querySelector('.janela-titulo');
     let deslocamentoX = 0;
     let deslocamentoY = 0;
 
     titulo.addEventListener('pointerdown', (event) => {
+        if (event.target.closest('button')) return;
         deslocamentoX = event.clientX - janela.offsetLeft;
         deslocamentoY = event.clientY - janela.offsetTop;
 
@@ -66,8 +78,8 @@ function tornarArrastavel(janela) {
         let novaEsquerda = event.clientX - deslocamentoX;
         let novoTopo = event.clientY - deslocamentoY;
 
-        const limiteMaxEsquerda = window.innerWidth - janela.offsetWidth + 50; 
-        const limiteMaxTopo = window.innerHeight - janela.offsetHeight + 50;
+        const limiteMaxEsquerda = telaDesktop.clientWidth - janela.offsetWidth + 50; 
+        const limiteMaxTopo = telaDesktop.clientHeight - janela.offsetHeight + 50;
 
         
         novaEsquerda = Math.max(-50, Math.min(novaEsquerda, limiteMaxEsquerda));
@@ -84,4 +96,22 @@ function tornarArrastavel(janela) {
     });
 }
 
-tornarArrastavel(document.querySelector('.janela'));
+function trazerParaFrente(janela) {
+    zTopo++;
+    janela.style.zIndex = zTopo;
+}
+
+function configurarBotaoFechar(janela) {
+    const botaoFechar = janela.querySelector('.janela-fechar');
+    if (botaoFechar) {
+        botaoFechar.addEventListener('click', () => janela.remove());
+    }
+}
+
+function configurarJanela(janela) {
+    tornarArrastavel(janela);
+    configurarBotaoFechar(janela);
+    janela.addEventListener('pointerdown', () => trazerParaFrente(janela));
+}
+
+document.querySelectorAll('.janela').forEach(configurarJanela);
