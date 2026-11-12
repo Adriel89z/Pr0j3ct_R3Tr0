@@ -70,3 +70,72 @@
 .janela-corpo {
     padding: 16px;
 }
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+    font-family: Tahoma, Verdana, sans-serif;
+}
+
+#tela-desktop {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    background: #3a6ea5;
+}
+
+#tela-desktop h1 {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    margin: 0;
+    font-size: 16px;
+    color: white;
+}
+
+#area-icones {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.icone {
+    width: 80px;
+    padding: 4px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    text-align: center;
+    color: white;
+    text-shadow: 1px 1px 2px black;
+    cursor: pointer;
+    user-select: none;
+}
+
+.icone.selecionado {
+    background-color: rgba(11, 97, 255, 0.4);
+    border: 1px dotted rgba(255, 255, 255, 0.8);
+}
+
+.icone.selecionado .icone-nome {
+    background-color: #0b61ff;
+    text-shadow: none;
+}
+.icone-imagem {
+    display: block;
+    font-size: 40px;
+    line-height: 1.2;
+}
+
+.icone-nome {
+    display: block;
+    font-size: 12px;
+    padding: 1px 3px;
+}

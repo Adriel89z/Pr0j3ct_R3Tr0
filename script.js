@@ -115,3 +115,55 @@ function configurarJanela(janela) {
 }
 
 document.querySelectorAll('.janela').forEach(configurarJanela);
+
+let contadorJanelas = 0;
+
+function abrirJanela(titulo, conteudo) {
+    const janela = document.createElement('div');
+    janela.className = 'janela';
+
+    const barra = document.createElement('div');
+    barra.className = 'janela-titulo';
+
+    const spanTitulo = document.createElement('span');
+    spanTitulo.textContent = titulo;
+
+    const botaoFechar = document.createElement('button');
+    botaoFechar.className = 'janela-fechar';
+    botaoFechar.textContent = 'X';
+
+    barra.append(spanTitulo, botaoFechar);
+
+    const corpo = document.createElement('div');
+    corpo.className = 'janela-corpo';
+    corpo.textContent = conteudo;
+
+    janela.append(barra, corpo);
+
+    const deslocamento = (contadorJanelas % 8) * 30;
+    janela.style.left = `${150 + deslocamento}px`;
+    janela.style.top = `${100 + deslocamento}px`;
+    contadorJanelas++;
+
+    telaDesktop.appendChild(janela);
+    configurarJanela(janela);
+    trazerParaFrente(janela);
+}
+
+const icones = document.querySelectorAll('.icone');
+
+icones.forEach(icone => {
+    icone.addEventListener('dblclick', () => {
+        abrirJanela(icone.dataset.titulo, icone.dataset.conteudo);
+    });
+
+    icone.addEventListener('click', (evento) => {
+        evento.stopPropagation();
+        icones.forEach(item => item.classList.remove('selecionado'));
+        icone.classList.add('selecionado');
+    });
+});
+
+telaDesktop.addEventListener('click', () => {
+    icones.forEach(icone => icone.classList.remove('selecionado'));
+});

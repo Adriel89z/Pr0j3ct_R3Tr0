@@ -14,17 +14,6 @@
         <button id="botao-entrar">Entrar</button>
     </div>
 
-    <div id="tela-desktop" class="escondido">
-        <div class="janela" style="left: 100px; top: 80px;">
-            <div class="janela-titulo">
-                <span>Minha Janela</span>
-                <button class="janela-fechar">X</button>
-            </div>
-            <div class="janela-corpo">Conteúdo aqui</div>
-        </div>
-        <h1>Bem-Vindo, <span id="nome-usuario"></span>!</h1>
-    </div>
-
     <div id="popup" class="escondido">
         <div class="popup-titulo">
             <span>Aviso</span>
@@ -35,6 +24,27 @@
             <p id="popup-mensagem"></p>
         </div>
         <button id="popup-ok">OK</button>
+    </div>
+
+        <div id="tela-desktop" class="escondido">
+        <div id="area-icones">
+            <div class="icone" data-titulo="Meu Computador" data-conteudo="Aqui vai ficar o conteúdo do Meu Computador.">
+                <span class="icone-imagem">🖥️</span>
+                <span class="icone-nome">Meu Computador</span>
+            </div>
+
+            <div class="icone" data-titulo="Bloco de Notas" data-conteudo="Uma janela de teste, aberta pelo segundo ícone.">
+                <span class="icone-imagem">📝</span>
+                <span class="icone-nome">Bloco de Notas</span>
+            </div>
+
+            <div class="icone" data-titulo="Lixeira" data-conteudo="Janela onde vai o Lixo!.">
+                <span class="icone-imagem">🗑️</span>
+                <span class="icone-nome">Lixeira</span>
+            </div>
+        </div>
+
+        <h1>Bem-Vindo, <span id="nome-usuario"></span>!</h1>
     </div>
 
     <script src="script.js"></script>
