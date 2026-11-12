@@ -4,6 +4,12 @@ const telaLogin = document.getElementById('tela-login');
 const telaDesktop = document.getElementById('tela-desktop');
 const nomeUsuarioSpan = document.getElementById('nome-usuario');
 
+const areaTrabalho = document.getElementById('area-trabalho');
+const botoesJanelas = document.getElementById('botoes-janelas');
+const relogio = document.getElementById('relogio');
+
+const botoesBarra = new Map();
+
 const popup = document.getElementById('popup');
 const popupMensagem = document.getElementById('popup-mensagem');
 const popupOk = document.getElementById('popup-ok');
@@ -91,22 +97,36 @@ function tornarArrastavel(janela) {
     });
 }
 
+function atualizarBarra(janelaAtiva) {
+    botoesBarra.forEach((botao, janela) => {
+        botao.classList.toggle('ativo', janela === janelaAtiva);
+    });
+}
+
 function trazerParaFrente(janela) {
     zTopo++;
     janela.style.zIndex = zTopo;
-}
-
-function configurarBotaoFechar(janela) {
-    const botaoFechar = janela.querySelector('.janela-fechar');
-    if (botaoFechar) {
-        botaoFechar.addEventListener('click', () => janela.remove());
-    }
+    atualizarBarra(janela);
 }
 
 function configurarJanela(janela) {
     tornarArrastavel(janela);
     configurarBotaoFechar(janela);
     janela.addEventListener('pointerdown', () => trazerParaFrente(janela));
+}
+
+function fecharJanela(janela) {
+    const botao = botoesBarra.get(janela);
+    if (botao) botao.remove();
+    botoesBarra.delete(janela);
+    janela.remove();
+}
+
+function configurarBotaoFechar(janela) {
+    const botaoFechar = janela.querySelector('.janela-fechar');
+    if (botaoFechar) {
+        botaoFechar.addEventListener('click', () => fecharJanela(janela));
+    }
 }
 
 let contadorJanelas = 0;
@@ -138,8 +158,16 @@ function abrirJanela(titulo, conteudo) {
     janela.style.top = `${100 + deslocamento}px`;
     contadorJanelas++;
 
-    telaDesktop.appendChild(janela);
+    areaTrabalho.appendChild(janela);
     configurarJanela(janela);
+
+    const botaoBarra = document.createElement('button');
+    botaoBarra.className = 'botao-janela';
+    botaoBarra.textContent = titulo;
+    botaoBarra.addEventListener('click', () => trazerParaFrente(janela));
+    botoesBarra.set(janela, botaoBarra);
+    botoesJanelas.appendChild(botaoBarra);
+
     trazerParaFrente(janela);
 }
 
@@ -162,3 +190,15 @@ telaDesktop.addEventListener('click', () => {
 });
 
 tornarArrastavel(popup);
+
+function atualizarRelogio() {
+    const agora = new Date();
+    relogio.textContent = agora.toLocaleTimeString('pt-BR', {
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+}
+
+atualizarRelogio();
+setInterval(atualizarRelogio, 1000);
+
