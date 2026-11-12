@@ -16,6 +16,8 @@ let zTopo = 1;
 function mostrarAviso(mensagem) {
     popupMensagem.textContent = mensagem;
     popup.classList.remove('escondido');
+    popup.style.left = `${(window.innerWidth - popup.offsetWidth) / 2}px`;
+    popup.style.top = `${(window.innerHeight - popup.offsetHeight) / 2}px`;
 }
 
 function fecharAviso() {
@@ -36,6 +38,7 @@ function entrar() {
     }
 
     nomeUsuarioSpan.textContent = nomeDigitado;
+    fecharAviso();
     telaLogin.classList.add('escondido');
     telaDesktop.classList.remove('escondido');
 }
@@ -50,15 +53,6 @@ inputNome.addEventListener('keydown', (event) => {
 
 popupOk.addEventListener('click', fecharAviso);
 popupFechar.addEventListener('click', fecharAviso);
-
-function configurarBotaoFechar(janela) {
-    const botaoFechar = janela.querySelector('.janela-fechar');
-    if (botaoFechar) {
-        botaoFechar.addEventListener('click', () => {
-            janela.remove();
-        });
-    }
-}
 
 function tornarArrastavel(janela) {
     const titulo = janela.querySelector('.janela-titulo');
@@ -78,8 +72,9 @@ function tornarArrastavel(janela) {
         let novaEsquerda = event.clientX - deslocamentoX;
         let novoTopo = event.clientY - deslocamentoY;
 
-        const limiteMaxEsquerda = telaDesktop.clientWidth - janela.offsetWidth + 50; 
-        const limiteMaxTopo = telaDesktop.clientHeight - janela.offsetHeight + 50;
+        const area = janela.parentElement;
+        const limiteMaxEsquerda = area.clientWidth - janela.offsetWidth + 50;
+        const limiteMaxTopo = area.clientHeight - janela.offsetHeight + 50;
 
         
         novaEsquerda = Math.max(-50, Math.min(novaEsquerda, limiteMaxEsquerda));
@@ -113,8 +108,6 @@ function configurarJanela(janela) {
     configurarBotaoFechar(janela);
     janela.addEventListener('pointerdown', () => trazerParaFrente(janela));
 }
-
-document.querySelectorAll('.janela').forEach(configurarJanela);
 
 let contadorJanelas = 0;
 
@@ -167,3 +160,5 @@ icones.forEach(icone => {
 telaDesktop.addEventListener('click', () => {
     icones.forEach(icone => icone.classList.remove('selecionado'));
 });
+
+tornarArrastavel(popup);
