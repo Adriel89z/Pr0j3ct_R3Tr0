@@ -18,6 +18,7 @@ const popupFechar = document.getElementById('popup-fechar');
 const TAMANHO_MAXIMO_NOME = 20;
 
 let zTopo = 1;
+let janelaTopo = null;
 
 function mostrarAviso(mensagem) {
     popupMensagem.textContent = mensagem;
@@ -82,14 +83,14 @@ function tornarArrastavel(janela) {
         const limiteMaxEsquerda = area.clientWidth - janela.offsetWidth + 50;
         const limiteMaxTopo = area.clientHeight - janela.offsetHeight + 50;
 
-        
+
         novaEsquerda = Math.max(-50, Math.min(novaEsquerda, limiteMaxEsquerda));
         novoTopo = Math.max(0, Math.min(novoTopo, limiteMaxTopo));
-        
+
         janela.style.left = `${novaEsquerda}px`;
         janela.style.top = `${novoTopo}px`;
     });
-    
+
     titulo.addEventListener('pointerup', (event) => {
         if (titulo.hasPointerCapture(event.pointerId)) {
             titulo.releasePointerCapture(event.pointerId);
@@ -104,9 +105,43 @@ function atualizarBarra(janelaAtiva) {
 }
 
 function trazerParaFrente(janela) {
-    zTopo++;
-    janela.style.zIndex = zTopo;
+    if (janela !== janelaTopo) {
+        zTopo++;
+        janela.style.zIndex = zTopo;
+        janelaTopo = janela;
+    }
     atualizarBarra(janela);
+}
+
+function encontrarJanelaTopo() {
+    let janelaTopo = null;
+    let maiorZ = -1;
+
+    botoesBarra.forEach((botao, janela) => {
+        if (!janela.classList.contains('minimizada')) {
+            const z = Number(janela.style.zIndex);
+            if (z > maiorZ) {
+                maiorZ = z;
+                janelaTopo = janela;
+            }
+        }
+    });
+
+    return janelaTopo;
+}
+
+function alternarJanela(janela) {
+    const botao = botoesBarra.get(janela);
+
+    if (janela.classList.contains('minimizada')) {
+        janela.classList.remove('minimizada');
+        trazerParaFrente(janela);
+    } else if (botao && botao.classList.contains('ativo')) {
+        janela.classList.add('minimizada');
+        atualizarBarra(encontrarJanelaTopo());
+    } else {
+        trazerParaFrente(janela);
+    }
 }
 
 function configurarJanela(janela) {
@@ -164,7 +199,7 @@ function abrirJanela(titulo, conteudo) {
     const botaoBarra = document.createElement('button');
     botaoBarra.className = 'botao-janela';
     botaoBarra.textContent = titulo;
-    botaoBarra.addEventListener('click', () => trazerParaFrente(janela));
+    botaoBarra.addEventListener('click', () => alternarJanela(janela));
     botoesBarra.set(janela, botaoBarra);
     botoesJanelas.appendChild(botaoBarra);
 
