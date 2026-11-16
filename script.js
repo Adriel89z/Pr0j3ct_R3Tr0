@@ -14,6 +14,8 @@ const popup = document.getElementById('popup');
 const popupMensagem = document.getElementById('popup-mensagem');
 const popupOk = document.getElementById('popup-ok');
 const popupFechar = document.getElementById('popup-fechar');
+const botaoIniciar = document.getElementById('botao-iniciar');
+const menuIniciar = document.getElementById('menu-iniciar');
 
 const TAMANHO_MAXIMO_NOME = 20;
 
@@ -114,7 +116,7 @@ function trazerParaFrente(janela) {
 }
 
 function encontrarJanelaTopo() {
-    let janelaTopo = null;
+    let candidata = null;
     let maiorZ = -1;
 
     botoesBarra.forEach((botao, janela) => {
@@ -122,12 +124,12 @@ function encontrarJanelaTopo() {
             const z = Number(janela.style.zIndex);
             if (z > maiorZ) {
                 maiorZ = z;
-                janelaTopo = janela;
+                candidata = janela;
             }
         }
     });
 
-    return janelaTopo;
+    return candidata;
 }
 
 function alternarJanela(janela) {
@@ -136,9 +138,10 @@ function alternarJanela(janela) {
     if (janela.classList.contains('minimizada')) {
         janela.classList.remove('minimizada');
         trazerParaFrente(janela);
-    } else if (botao && botao.classList.contains('ativo')) {
+    } else if (janela === janelaTopo) {
         janela.classList.add('minimizada');
-        atualizarBarra(encontrarJanelaTopo());
+        janelaTopo = encontrarJanelaTopo();
+        atualizarBarra(janelaTopo);
     } else {
         trazerParaFrente(janela);
     }
@@ -155,6 +158,11 @@ function fecharJanela(janela) {
     if (botao) botao.remove();
     botoesBarra.delete(janela);
     janela.remove();
+
+    if (janela === janelaTopo) {
+        janelaTopo = encontrarJanelaTopo();
+        atualizarBarra(janelaTopo);
+    }
 }
 
 function configurarBotaoFechar(janela) {
@@ -222,6 +230,7 @@ icones.forEach(icone => {
 
 telaDesktop.addEventListener('click', () => {
     icones.forEach(icone => icone.classList.remove('selecionado'));
+    menuIniciar.classList.add('escondido');
 });
 
 tornarArrastavel(popup);
@@ -236,4 +245,21 @@ function atualizarRelogio() {
 
 atualizarRelogio();
 setInterval(atualizarRelogio, 1000);
+
+botaoIniciar.addEventListener('click', (evento) => {
+    evento.stopPropagation();
+    menuIniciar.classList.toggle('escondido');
+});
+
+menuIniciar.addEventListener('click', (evento) => {
+    evento.stopPropagation();
+});
+
+document.querySelectorAll('.menu-item').forEach(item => {
+    item.addEventListener('click', () => {
+        abrirJanela(item.dataset.titulo, item.dataset.conteudo);
+        menuIniciar.classList.add('escondido');
+    });
+});
+
 

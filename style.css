@@ -182,3 +182,25 @@ html, body {
 .janela.minimizada { 
     display: none; 
 }
+
+#menu-iniciar {
+    position: absolute;
+    left: 0;
+    bottom: 30px;
+    width: 220px;
+    z-index: 5000;
+    background: #ece9d8;
+    border: 2px solid #0054e3;
+    border-bottom: none;
+}
+
+.menu-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.menu-item:hover {
+    background: #316ac5;
+    color: white;
+}
