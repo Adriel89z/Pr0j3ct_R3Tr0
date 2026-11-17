@@ -19,6 +19,29 @@ const menuIniciar = document.getElementById('menu-iniciar');
 
 const TAMANHO_MAXIMO_NOME = 20;
 
+const areaIcones = document.getElementById('area-icones');
+
+const programas = [
+    {
+        id: 'computador',
+        icone: '🖥️',
+        nome: 'Meu Computador',
+        conteudo: 'Aqui vai ficar o conteúdo do Meu Computador.'
+    },
+    {
+        id: 'notas',
+        icone: '📝',
+        nome: 'Bloco de Notas',
+        conteudo: 'Uma janela de teste, aberta pelo segundo ícone.'
+    },
+    {
+        id: 'lixeira',
+        icone: '🗑️',
+        nome: 'Lixeira',
+        conteudo: 'Janela onde vai o Lixo!.'
+    }
+];
+
 let zTopo = 1;
 let janelaTopo = null;
 
@@ -133,7 +156,6 @@ function encontrarJanelaTopo() {
 }
 
 function alternarJanela(janela) {
-    const botao = botoesBarra.get(janela);
 
     if (janela.classList.contains('minimizada')) {
         janela.classList.remove('minimizada');
@@ -174,7 +196,56 @@ function configurarBotaoFechar(janela) {
 
 let contadorJanelas = 0;
 
-function abrirJanela(titulo, conteudo) {
+function desselecionarIcones() {
+    areaIcones.querySelectorAll('.icone').forEach(icone => {
+        icone.classList.remove('selecionado');
+    });
+}
+
+function criarIcone(programa) {
+    const icone = document.createElement('div');
+    icone.className = 'icone';
+
+    const imagem = document.createElement('span');
+    imagem.className = 'icone-imagem';
+    imagem.textContent = programa.icone;
+
+    const nome = document.createElement('span');
+    nome.className = 'icone-nome';
+    nome.textContent = programa.nome;
+
+    icone.append(imagem, nome);
+
+    icone.addEventListener('dblclick', () => abrirJanela(programa));
+
+    icone.addEventListener('click', (evento) => {
+        evento.stopPropagation();
+        desselecionarIcones();
+        icone.classList.add('selecionado');
+    });
+
+    return icone;
+}
+
+function criarItemMenu(programa) {
+    const item = document.createElement('div');
+    item.className = 'menu-item';
+    item.textContent = `${programa.icone} ${programa.nome}`;
+
+    item.addEventListener('click', () => {
+        abrirJanela(programa);
+        menuIniciar.classList.add('escondido');
+    });
+
+    return item;
+}
+
+programas.forEach(programa => {
+    areaIcones.appendChild(criarIcone(programa));
+    menuIniciar.appendChild(criarItemMenu(programa));
+});
+
+function abrirJanela(programa) {
     const janela = document.createElement('div');
     janela.className = 'janela';
 
@@ -182,7 +253,7 @@ function abrirJanela(titulo, conteudo) {
     barra.className = 'janela-titulo';
 
     const spanTitulo = document.createElement('span');
-    spanTitulo.textContent = titulo;
+    spanTitulo.textContent = programa.nome;
 
     const botaoFechar = document.createElement('button');
     botaoFechar.className = 'janela-fechar';
@@ -192,7 +263,7 @@ function abrirJanela(titulo, conteudo) {
 
     const corpo = document.createElement('div');
     corpo.className = 'janela-corpo';
-    corpo.textContent = conteudo;
+    corpo.textContent = programa.conteudo;
 
     janela.append(barra, corpo);
 
@@ -206,7 +277,7 @@ function abrirJanela(titulo, conteudo) {
 
     const botaoBarra = document.createElement('button');
     botaoBarra.className = 'botao-janela';
-    botaoBarra.textContent = titulo;
+    botaoBarra.textContent = programa.nome;
     botaoBarra.addEventListener('click', () => alternarJanela(janela));
     botoesBarra.set(janela, botaoBarra);
     botoesJanelas.appendChild(botaoBarra);
@@ -214,22 +285,8 @@ function abrirJanela(titulo, conteudo) {
     trazerParaFrente(janela);
 }
 
-const icones = document.querySelectorAll('.icone');
-
-icones.forEach(icone => {
-    icone.addEventListener('dblclick', () => {
-        abrirJanela(icone.dataset.titulo, icone.dataset.conteudo);
-    });
-
-    icone.addEventListener('click', (evento) => {
-        evento.stopPropagation();
-        icones.forEach(item => item.classList.remove('selecionado'));
-        icone.classList.add('selecionado');
-    });
-});
-
 telaDesktop.addEventListener('click', () => {
-    icones.forEach(icone => icone.classList.remove('selecionado'));
+    desselecionarIcones();
     menuIniciar.classList.add('escondido');
 });
 
@@ -253,13 +310,6 @@ botaoIniciar.addEventListener('click', (evento) => {
 
 menuIniciar.addEventListener('click', (evento) => {
     evento.stopPropagation();
-});
-
-document.querySelectorAll('.menu-item').forEach(item => {
-    item.addEventListener('click', () => {
-        abrirJanela(item.dataset.titulo, item.dataset.conteudo);
-        menuIniciar.classList.add('escondido');
-    });
 });
 
 
