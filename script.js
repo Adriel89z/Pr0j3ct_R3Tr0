@@ -39,8 +39,49 @@ const programas = [
         icone: '🗑️',
         nome: 'Lixeira',
         conteudo: 'Janela onde vai o Lixo!.'
+    },
+    {
+    id: 'sobre',
+    icone: 'ℹ️',
+    nome: 'Sobre',
+    conteudo: 'Pr0j3ct_R3Tr0, um projeto de estudo.'
+    },
+    {
+    id: 'teste',
+    icone: '🧪',
+    nome: 'Teste',
+    montar: (corpo) => {
+        const botao = document.createElement('button');
+        botao.textContent = 'Clique em mim';
+        const resposta = document.createElement('p');
+
+        botao.addEventListener('click', () => {
+            resposta.textContent = 'Funcionou!';
+        });
+
+        corpo.append(botao, resposta);
     }
+}
 ];
+
+const sons = {
+    abrirJanela: new Audio('audio/sons/abrir-janela.wav'),
+    login: new Audio('audio/sons/login.wav'),
+    erro: new Audio('audio/sons/erro.wav'),
+    chatMensagem: new Audio('audio/sons/chat-mensagem.wav')
+};
+
+let somLigado = true;
+let volume = 0.6;
+
+function tocarSom(nome) {
+    if (!somLigado) return;
+    const som = sons[nome];
+    if (!som) return;
+    som.volume = volume;
+    som.currentTime = 0;
+    som.play().catch(() => {});
+}
 
 let zTopo = 1;
 let janelaTopo = null;
@@ -50,6 +91,7 @@ function mostrarAviso(mensagem) {
     popup.classList.remove('escondido');
     popup.style.left = `${(window.innerWidth - popup.offsetWidth) / 2}px`;
     popup.style.top = `${(window.innerHeight - popup.offsetHeight) / 2}px`;
+    tocarSom('erro');
 }
 
 function fecharAviso() {
@@ -73,6 +115,7 @@ function entrar() {
     fecharAviso();
     telaLogin.classList.add('escondido');
     telaDesktop.classList.remove('escondido');
+    tocarSom('login');
 }
 
 botaoEntrar.addEventListener('click', entrar);
@@ -267,6 +310,11 @@ function abrirJanela(programa) {
 
     janela.append(barra, corpo);
 
+    if (programa.montar) {
+    programa.montar(corpo);
+    } else {
+    }
+
     const deslocamento = (contadorJanelas % 8) * 30;
     janela.style.left = `${150 + deslocamento}px`;
     janela.style.top = `${100 + deslocamento}px`;
@@ -283,6 +331,7 @@ function abrirJanela(programa) {
     botoesJanelas.appendChild(botaoBarra);
 
     trazerParaFrente(janela);
+    tocarSom('abrirJanela');
 }
 
 telaDesktop.addEventListener('click', () => {
