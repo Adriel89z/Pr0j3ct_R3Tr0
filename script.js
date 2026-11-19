@@ -61,7 +61,13 @@ const programas = [
 
         corpo.append(botao, resposta);
     }
-}
+    },
+    {
+    id: 'musica',
+    icone: '🎵',
+    nome: 'Player de Música',
+    montar: montarPlayer
+    }
 ];
 
 const sons = {
@@ -70,6 +76,17 @@ const sons = {
     erro: new Audio('audio/sons/erro.wav'),
     chatMensagem: new Audio('audio/sons/chat-mensagem.wav')
 };
+
+const playlist = [
+    {
+        titulo: 'Título da faixa',
+        artista: 'Nome do autor',
+        arquivo: 'audio/musicas/faixa1.mp3'
+    }
+];
+
+const limpezasJanelas = new Map();
+
 
 let somLigado = true;
 let volume = 0.6;
@@ -222,6 +239,9 @@ function fecharJanela(janela) {
     const botao = botoesBarra.get(janela);
     if (botao) botao.remove();
     botoesBarra.delete(janela);
+    const limpeza = limpezasJanelas.get(janela);
+    if (limpeza) limpeza();
+    limpezasJanelas.delete(janela);
     janela.remove();
 
     if (janela === janelaTopo) {
@@ -306,6 +326,14 @@ function abrirJanela(programa) {
 
     const corpo = document.createElement('div');
     corpo.className = 'janela-corpo';
+    let limpeza = null;
+
+    if (programa.montar) {
+        limpeza = programa.montar(corpo);
+    } else {
+        corpo.textContent = programa.conteudo;
+    }
+    
     corpo.textContent = programa.conteudo;
 
     janela.append(barra, corpo);
@@ -328,6 +356,7 @@ function abrirJanela(programa) {
     botaoBarra.textContent = programa.nome;
     botaoBarra.addEventListener('click', () => alternarJanela(janela));
     botoesBarra.set(janela, botaoBarra);
+    if (limpeza) limpezasJanelas.set(janela, limpeza);
     botoesJanelas.appendChild(botaoBarra);
 
     trazerParaFrente(janela);
@@ -361,4 +390,38 @@ menuIniciar.addEventListener('click', (evento) => {
     evento.stopPropagation();
 });
 
+function montarPlayer(corpo) {
+    const audio = new Audio();
+    let faixaAtual = 0;
+
+    const nomeFaixa = document.createElement('p');
+    const botaoPlay = document.createElement('button');
+    botaoPlay.textContent = '▶';
+
+    function carregarFaixa(indice) {
+        faixaAtual = indice;
+        const faixa = playlist[indice];
+        audio.src = faixa.arquivo;
+        nomeFaixa.textContent = `${faixa.titulo} - ${faixa.artista}`;
+    }
+
+    botaoPlay.addEventListener('click', () => {
+        if (audio.paused) {
+            audio.play().catch((erro) => console.log('Erro no player:', erro));
+        } else {
+            audio.pause();
+        }
+    });
+
+    audio.addEventListener('play', () => { botaoPlay.textContent = '⏸'; });
+    audio.addEventListener('pause', () => { botaoPlay.textContent = '▶'; });
+
+    carregarFaixa(0);
+    corpo.append(nomeFaixa, botaoPlay);
+
+    return () => {
+        audio.pause();
+        audio.src = '';
+    };
+}
 
