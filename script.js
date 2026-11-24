@@ -9,6 +9,7 @@ const botoesJanelas = document.getElementById('botoes-janelas');
 const relogio = document.getElementById('relogio');
 
 const botoesBarra = new Map();
+const janelasPorPrograma = new Map();
 
 const popup = document.getElementById('popup');
 const popupMensagem = document.getElementById('popup-mensagem');
@@ -47,22 +48,6 @@ const programas = [
     conteudo: 'Pr0j3ct_R3Tr0, um projeto de estudo.'
     },
     {
-    id: 'teste',
-    icone: '🧪',
-    nome: 'Teste',
-    montar: (corpo) => {
-        const botao = document.createElement('button');
-        botao.textContent = 'Clique em mim';
-        const resposta = document.createElement('p');
-
-        botao.addEventListener('click', () => {
-            resposta.textContent = 'Funcionou!';
-        });
-
-        corpo.append(botao, resposta);
-    }
-    },
-    {
     id: 'musica',
     icone: '🎵',
     nome: 'Player de Música',
@@ -77,13 +62,7 @@ const sons = {
     chatMensagem: new Audio('audio/sons/chat-mensagem.wav')
 };
 
-const playlist = [
-    {
-        titulo: 'Título da faixa',
-        artista: 'Nome do autor',
-        arquivo: 'audio/musicas/faixa1.mp3'
-    }
-];
+const playlist = [];
 
 const limpezasJanelas = new Map();
 
@@ -236,6 +215,8 @@ function configurarJanela(janela) {
 }
 
 function fecharJanela(janela) {
+    janelasPorPrograma.delete(janela.dataset.programaId);
+    
     const botao = botoesBarra.get(janela);
     if (botao) botao.remove();
     botoesBarra.delete(janela);
@@ -309,8 +290,17 @@ programas.forEach(programa => {
 });
 
 function abrirJanela(programa) {
+    const existente = janelasPorPrograma.get(programa.id);
+
+    if (existente) {
+        existente.classList.remove('minimizada');
+        trazerParaFrente(existente);
+        return;
+    }
+    
     const janela = document.createElement('div');
     janela.className = 'janela';
+    janela.dataset.programaId = programa.id;
 
     const barra = document.createElement('div');
     barra.className = 'janela-titulo';
@@ -333,15 +323,8 @@ function abrirJanela(programa) {
     } else {
         corpo.textContent = programa.conteudo;
     }
-    
-    corpo.textContent = programa.conteudo;
 
     janela.append(barra, corpo);
-
-    if (programa.montar) {
-    programa.montar(corpo);
-    } else {
-    }
 
     const deslocamento = (contadorJanelas % 8) * 30;
     janela.style.left = `${150 + deslocamento}px`;
@@ -356,6 +339,7 @@ function abrirJanela(programa) {
     botaoBarra.textContent = programa.nome;
     botaoBarra.addEventListener('click', () => alternarJanela(janela));
     botoesBarra.set(janela, botaoBarra);
+    janelasPorPrograma.set(programa.id, janela);
     if (limpeza) limpezasJanelas.set(janela, limpeza);
     botoesJanelas.appendChild(botaoBarra);
 
@@ -391,6 +375,12 @@ menuIniciar.addEventListener('click', (evento) => {
 });
 
 function montarPlayer(corpo) {
+    if (playlist.length === 0) {
+        const aviso = document.createElement('p');
+        aviso.textContent = 'Nenhuma faixa disponível ainda.';
+        corpo.appendChild(aviso);
+        return null;
+    }
     const audio = new Audio();
     let faixaAtual = 0;
 
