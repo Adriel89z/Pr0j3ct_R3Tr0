@@ -164,7 +164,9 @@ function tornarArrastavel(janela) {
 
 function atualizarBarra(janelaAtiva) {
     botoesBarra.forEach((botao, janela) => {
-        botao.classList.toggle('ativo', janela === janelaAtiva);
+        const ativa = janela === janelaAtiva;
+        botao.classList.toggle('ativo', ativa);
+        janela.classList.toggle('ativa', ativa);
     });
 }
 
@@ -200,17 +202,23 @@ function alternarJanela(janela) {
         janela.classList.remove('minimizada');
         trazerParaFrente(janela);
     } else if (janela === janelaTopo) {
-        janela.classList.add('minimizada');
-        janelaTopo = encontrarJanelaTopo();
-        atualizarBarra(janelaTopo);
+    minimizarJanela(janela);
     } else {
         trazerParaFrente(janela);
+    }
+}
+
+function configurarBotaoMinimizar(janela) {
+    const botao = janela.querySelector('.janela-minimizar');
+    if (botao) {
+        botao.addEventListener('click', () => minimizarJanela(janela));
     }
 }
 
 function configurarJanela(janela) {
     tornarArrastavel(janela);
     configurarBotaoFechar(janela);
+    configurarBotaoMinimizar(janela);
     janela.addEventListener('pointerdown', () => trazerParaFrente(janela));
 }
 
@@ -308,11 +316,21 @@ function abrirJanela(programa) {
     const spanTitulo = document.createElement('span');
     spanTitulo.textContent = programa.nome;
 
+    const botoes = document.createElement('div');
+    botoes.className = 'janela-botoes';
+
+    const botaoMinimizar = document.createElement('button');
+    botaoMinimizar.className = 'janela-minimizar';
+    botaoMinimizar.textContent = '_';
+    botaoMinimizar.title = 'Minimizar';
+
     const botaoFechar = document.createElement('button');
     botaoFechar.className = 'janela-fechar';
     botaoFechar.textContent = 'X';
+    botaoFechar.title = 'Fechar';
 
-    barra.append(spanTitulo, botaoFechar);
+    botoes.append(botaoMinimizar, botaoFechar);
+    barra.append(spanTitulo, botoes);
 
     const corpo = document.createElement('div');
     corpo.className = 'janela-corpo';
@@ -345,6 +363,12 @@ function abrirJanela(programa) {
 
     trazerParaFrente(janela);
     tocarSom('abrirJanela');
+}
+
+function minimizarJanela(janela) {
+    janela.classList.add('minimizada');
+    janelaTopo = encontrarJanelaTopo();
+    atualizarBarra(janelaTopo);
 }
 
 telaDesktop.addEventListener('click', () => {
