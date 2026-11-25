@@ -29,25 +29,67 @@
     position: absolute;
     width: 300px;
     background: #ece9d8;
-    border: 2px solid #0054e3;
+    border: 3px solid #0831d9;
+    border-top: none;
+    border-radius: 8px 8px 0 0;
+    box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.5);
 }
 
 .janela-titulo {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 4px 6px;
-    background: linear-gradient(#3a8cf5, #0054e3);
+    height: 28px;
+    padding: 0 4px 0 8px;
+    background: linear-gradient(#0997ff, #0053ee 10%, #0050ee 80%, #06f);
     color: white;
     font-weight: bold;
+    text-shadow: 1px 1px #0f1089;
+    border-radius: 5px 5px 0 0;
     cursor: grab;
     user-select: none;
     touch-action: none;
 }
 
+.janela:not(.ativa) .janela-titulo {
+    background: linear-gradient(#7697e7, #7a96df);
+    text-shadow: none;
+}
+
+.janela-botoes {
+    display: flex;
+    gap: 2px;
+}
+
+.janela-botoes button {
+    width: 21px;
+    height: 21px;
+    padding: 0;
+    font-weight: bold;
+    line-height: 1;
+    color: white;
+    background: linear-gradient(135deg, #5a8cf5, #2a5bd7);
+    border: 1px solid white;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.janela-botoes button:hover {
+    filter: brightness(1.15);
+}
+
+.janela-botoes .janela-fechar {
+    background: linear-gradient(135deg, #e8886f, #c8381a);
+}
+
+button, input {
+    font-family: inherit;
+}
+
 .janela-corpo {
     padding: 16px;
 }
+
 
 * {
     box-sizing: border-box;
