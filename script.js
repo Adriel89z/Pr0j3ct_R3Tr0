@@ -18,6 +18,9 @@ const popupFechar = document.getElementById('popup-fechar');
 const botaoIniciar = document.getElementById('botao-iniciar');
 const menuIniciar = document.getElementById('menu-iniciar');
 
+const menuProgramas = document.getElementById('menu-programas');
+const menuNomeUsuario = document.getElementById('menu-nome-usuario');
+
 const TAMANHO_MAXIMO_NOME = 20;
 
 const areaIcones = document.getElementById('area-icones');
@@ -112,6 +115,9 @@ function entrar() {
     telaLogin.classList.add('escondido');
     telaDesktop.classList.remove('escondido');
     tocarSom('login');
+
+    nomeUsuarioSpan.textContent = nomeDigitado;
+    menuNomeUsuario.textContent = nomeDigitado;
 }
 
 botaoEntrar.addEventListener('click', entrar);
@@ -294,7 +300,7 @@ function criarItemMenu(programa) {
 
 programas.forEach(programa => {
     areaIcones.appendChild(criarIcone(programa));
-    menuIniciar.appendChild(criarItemMenu(programa));
+    menuProgramas.appendChild(criarItemMenu(programa));
 });
 
 function abrirJanela(programa) {
