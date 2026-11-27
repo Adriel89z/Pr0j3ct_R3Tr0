@@ -316,3 +316,122 @@ html, body {
     background: rgba(255, 255, 255, 0.2);
     border-color: rgba(255, 255, 255, 0.5);
 }
+
+#tela-login {
+    position: fixed;
+    inset: 0;
+    background: #5a7edc;
+}
+
+.login-layout {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.login-faixa {
+    flex: 0 0 90px;
+    background: #00309c;
+}
+
+.login-faixa-topo {
+    border-bottom: 3px solid #e8a73a;
+}
+
+.login-faixa-base {
+    border-top: 3px solid #e8a73a;
+}
+
+.login-centro {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 24px;
+}
+
+.login-esquerda {
+    width: 340px;
+    text-align: right;
+    color: white;
+}
+
+.login-esquerda h1 {
+    margin: 0 0 8px;
+    font-size: 34px;
+    font-style: italic;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.login-esquerda p {
+    margin: 0;
+    font-size: 15px;
+}
+
+.login-divisor {
+    align-self: stretch;
+    width: 2px;
+    margin: 60px 40px;
+    background: linear-gradient(transparent, white, transparent);
+}
+
+.login-direita {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.login-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    font-size: 40px;
+    background: white;
+    border: 3px solid #a9c4f5;
+    border-radius: 6px;
+}
+
+.login-campos {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.login-campos input {
+    width: 200px;
+    padding: 6px 8px;
+    border: 2px solid white;
+    border-radius: 4px;
+}
+
+.login-campos button {
+    padding: 6px 12px;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(#5bc45b, #2f8a2f);
+    border: 1px solid white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.login-campos button:hover {
+    filter: brightness(1.1);
+}
+
+@media (max-width: 700px) {
+    .login-centro {
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .login-esquerda {
+        width: auto;
+        text-align: center;
+    }
+
+    .login-divisor {
+        display: none;
+    }
+}

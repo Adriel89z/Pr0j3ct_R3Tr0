@@ -11,8 +11,28 @@
 
 <body>
     <div id="tela-login">
-        <input type="text" id="input-nome" placeholder="Nome do Usuário" maxlength="20">
-        <button id="botao-entrar">Entrar</button>
+        <div class="login-layout">
+            <div class="login-faixa login-faixa-topo"></div>
+
+            <div class="login-centro">
+                <div class="login-esquerda">
+                    <h1>Pr0j3ct_R3Tr0</h1>
+                    <p>Para começar, digite o seu nome</p>
+                </div>
+
+                <div class="login-divisor"></div>
+
+                <div class="login-direita">
+                    <div class="login-avatar">👤</div>
+                    <div class="login-campos">
+                        <input type="text" id="input-nome" placeholder="Nome do usuário" maxlength="20" autocomplete="off" autofocus>
+                        <button id="botao-entrar">Entrar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="login-faixa login-faixa-base"></div>
+        </div>
     </div>
 
     <div id="popup" class="janela ativa escondido">
